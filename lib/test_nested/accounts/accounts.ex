@@ -7,6 +7,7 @@ defmodule TestNested.Accounts do
   alias TestNested.Repo
 
   alias TestNested.Accounts.User
+  alias TestNested.Accounts.CustomField
 
   @doc """
   Returns the list of users.
@@ -18,7 +19,9 @@ defmodule TestNested.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> Repo.all()
+    |> Repo.preload(:custom_fields)
   end
 
   @doc """
@@ -35,7 +38,11 @@ defmodule TestNested.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload(:custom_fields)
+  end
 
   @doc """
   Creates a user.
@@ -100,5 +107,98 @@ defmodule TestNested.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+
+  @doc """
+  Returns the list of custom_fields.
+
+  ## Examples
+
+      iex> list_custom_fields()
+      [%CustomField{}, ...]
+
+  """
+  def list_custom_fields do
+    Repo.all(CustomField)
+  end
+
+  @doc """
+  Gets a single custom_field.
+
+  Raises `Ecto.NoResultsError` if the Custom field does not exist.
+
+  ## Examples
+
+      iex> get_custom_field!(123)
+      %CustomField{}
+
+      iex> get_custom_field!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_custom_field!(id), do: Repo.get!(CustomField, id)
+
+  @doc """
+  Creates a custom_field.
+
+  ## Examples
+
+      iex> create_custom_field(%{field: value})
+      {:ok, %CustomField{}}
+
+      iex> create_custom_field(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_custom_field(attrs \\ %{}) do
+    %CustomField{}
+    |> CustomField.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a custom_field.
+
+  ## Examples
+
+      iex> update_custom_field(custom_field, %{field: new_value})
+      {:ok, %CustomField{}}
+
+      iex> update_custom_field(custom_field, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_custom_field(%CustomField{} = custom_field, attrs) do
+    custom_field
+    |> CustomField.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a CustomField.
+
+  ## Examples
+
+      iex> delete_custom_field(custom_field)
+      {:ok, %CustomField{}}
+
+      iex> delete_custom_field(custom_field)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_custom_field(%CustomField{} = custom_field) do
+    Repo.delete(custom_field)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking custom_field changes.
+
+  ## Examples
+
+      iex> change_custom_field(custom_field)
+      %Ecto.Changeset{source: %CustomField{}}
+
+  """
+  def change_custom_field(%CustomField{} = custom_field) do
+    CustomField.changeset(custom_field, %{})
   end
 end

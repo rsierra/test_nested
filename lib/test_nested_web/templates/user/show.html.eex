@@ -12,6 +12,13 @@
     <%= @user.username %>
   </li>
 
+<%= for custom_field <- @user.custom_fields do %>
+  <li>
+    <strong><%= custom_field.kind %>:</strong>
+    <%= custom_field.value %>
+  </li>
+<% end %>
+
 </ul>
 
 <span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>

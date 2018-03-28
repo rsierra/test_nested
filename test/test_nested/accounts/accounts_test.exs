@@ -64,4 +64,66 @@ defmodule TestNested.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "custom_fields" do
+    alias TestNested.Accounts.CustomField
+
+    @valid_attrs %{kind: "some kind", value: "some value"}
+    @update_attrs %{kind: "some updated kind", value: "some updated value"}
+    @invalid_attrs %{kind: nil, value: nil}
+
+    def custom_field_fixture(attrs \\ %{}) do
+      {:ok, custom_field} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_custom_field()
+
+      custom_field
+    end
+
+    test "list_custom_fields/0 returns all custom_fields" do
+      custom_field = custom_field_fixture()
+      assert Accounts.list_custom_fields() == [custom_field]
+    end
+
+    test "get_custom_field!/1 returns the custom_field with given id" do
+      custom_field = custom_field_fixture()
+      assert Accounts.get_custom_field!(custom_field.id) == custom_field
+    end
+
+    test "create_custom_field/1 with valid data creates a custom_field" do
+      assert {:ok, %CustomField{} = custom_field} = Accounts.create_custom_field(@valid_attrs)
+      assert custom_field.kind == "some kind"
+      assert custom_field.value == "some value"
+    end
+
+    test "create_custom_field/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_custom_field(@invalid_attrs)
+    end
+
+    test "update_custom_field/2 with valid data updates the custom_field" do
+      custom_field = custom_field_fixture()
+      assert {:ok, custom_field} = Accounts.update_custom_field(custom_field, @update_attrs)
+      assert %CustomField{} = custom_field
+      assert custom_field.kind == "some updated kind"
+      assert custom_field.value == "some updated value"
+    end
+
+    test "update_custom_field/2 with invalid data returns error changeset" do
+      custom_field = custom_field_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_custom_field(custom_field, @invalid_attrs)
+      assert custom_field == Accounts.get_custom_field!(custom_field.id)
+    end
+
+    test "delete_custom_field/1 deletes the custom_field" do
+      custom_field = custom_field_fixture()
+      assert {:ok, %CustomField{}} = Accounts.delete_custom_field(custom_field)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_custom_field!(custom_field.id) end
+    end
+
+    test "change_custom_field/1 returns a custom_field changeset" do
+      custom_field = custom_field_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_custom_field(custom_field)
+    end
+  end
 end
