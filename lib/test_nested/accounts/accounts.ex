@@ -106,7 +106,32 @@ defmodule TestNested.Accounts do
 
   """
   def change_user(%User{} = user) do
-    User.changeset(user, %{})
+    user
+    |> initialize_custom_fields()
+    |> User.changeset(%{})
+  end
+
+  defp initialize_custom_fields(%User{custom_fields: %Ecto.Association.NotLoaded{}} = user) do
+    user
+    |> Repo.preload(:custom_fields)
+    |> initialize_custom_fields()
+  end
+
+  defp initialize_custom_fields(%User{custom_fields: custom_fields} = user) do
+    Map.put(user, :custom_fields, build_missing_custom_fields(custom_fields))
+  end
+
+  # Check a list of custom field values, initializing the missing ones of the
+  # a custom field kind
+  defp build_missing_custom_fields(custom_fields) do
+    CustomField.kinds()
+    |> Enum.map(fn kind ->
+      case Enum.find(custom_fields, &(&1.kind == kind)) do
+        nil -> %CustomField{kind: kind}
+        custom_field -> custom_field
+      end
+    end)
+  end
 
   @doc """
   Returns the list of custom_fields.
