@@ -111,7 +111,10 @@ defmodule TestNested.AccountsTest do
 
     test "update_custom_field/2 with invalid data returns error changeset" do
       custom_field = custom_field_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_custom_field(custom_field, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_custom_field(custom_field, @invalid_attrs)
+
       assert custom_field == Accounts.get_custom_field!(custom_field.id)
     end
 

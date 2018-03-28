@@ -5,9 +5,9 @@ defmodule TestNested.Accounts.User do
   alias TestNested.Accounts.CustomField
 
   schema "users" do
-    field :name, :string
-    field :username, :string
-    has_many :custom_fields, CustomField, on_replace: :delete
+    field(:name, :string)
+    field(:username, :string)
+    has_many(:custom_fields, CustomField, on_replace: :delete)
 
     timestamps()
   end

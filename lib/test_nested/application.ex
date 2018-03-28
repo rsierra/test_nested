@@ -11,7 +11,7 @@ defmodule TestNested.Application do
       # Start the Ecto repository
       supervisor(TestNested.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(TestNestedWeb.Endpoint, []),
+      supervisor(TestNestedWeb.Endpoint, [])
       # Start your own worker by calling: TestNested.Worker.start_link(arg1, arg2, arg3)
       # worker(TestNested.Worker, [arg1, arg2, arg3]),
     ]
