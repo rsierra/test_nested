@@ -25,9 +25,9 @@
         <%= input_value cff, :kind %>
       <% end %>
       <%= text_input cff, :value, class: "form-control" %>
-      -<%= error_tag cff, :id %>
-      -<%= error_tag cff, :kind %>
-      -<%= error_tag cff, :value %>
+      <%= error_tag cff, :id %>
+      <%= error_tag cff, :kind %>
+      <%= error_tag cff, :value %>
     </div>
   <% end %>
 
